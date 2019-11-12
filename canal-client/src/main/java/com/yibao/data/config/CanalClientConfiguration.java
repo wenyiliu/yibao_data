@@ -37,6 +37,7 @@ public class CanalClientConfiguration {
 
     @Bean
     private CanalClient canalClient() {
+
         log.info("正在尝试连接 canal 客户端....");
         //连接 canal 客户端
         CanalClient client;
