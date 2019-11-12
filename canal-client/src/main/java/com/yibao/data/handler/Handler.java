@@ -7,7 +7,7 @@ package com.yibao.data.handler;
 public interface Handler<T> {
 
     /**
-     * binlog数据解析
+     * 处理binlog数据
      *
      * @param t T
      * @return Boolean
