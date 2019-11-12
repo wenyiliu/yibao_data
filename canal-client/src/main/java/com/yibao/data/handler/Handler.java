@@ -6,5 +6,11 @@ package com.yibao.data.handler;
  */
 public interface Handler<T> {
 
+    /**
+     * binlog数据解析
+     *
+     * @param t T
+     * @return Boolean
+     */
     Boolean doChain(T t);
 }
