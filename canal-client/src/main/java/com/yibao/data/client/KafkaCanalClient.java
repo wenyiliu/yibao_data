@@ -93,7 +93,7 @@ public class KafkaCanalClient extends AbstractCanalClient {
     public CanalConnector processInstanceEntry(Map.Entry<String, CanalConfig.Instance> instanceEntry) {
         CanalConfig.Instance instance = instanceEntry.getValue();
         KafkaCanalConnector connector = new KafkaCanalConnector(instance.getServers(), instance.getTopic(),
-                instance.getPartition(), instance.getGroupId(), instance.getBatchSize(), Boolean.FALSE);
+                instance.getPartition(), instance.getGroupId(), instance.getBatchSize(), Boolean.TRUE);
         //canal 连接
         connector.connect();
         if (!StringUtils.isEmpty(instance.getFilter())) {
