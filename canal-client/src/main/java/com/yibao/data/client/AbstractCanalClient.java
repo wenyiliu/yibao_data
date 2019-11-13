@@ -3,6 +3,7 @@ package com.yibao.data.client;
 import com.alibaba.otter.canal.client.CanalConnector;
 import com.alibaba.otter.canal.protocol.exception.CanalClientException;
 import com.google.common.collect.Lists;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.yibao.data.annotation.CanalEventListener;
 import com.yibao.data.annotation.ListenPoint;
 import com.yibao.data.config.CanalConfig;
@@ -13,6 +14,9 @@ import org.springframework.core.annotation.AnnotatedElementUtils;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author liuwenyi
@@ -28,8 +32,16 @@ public abstract class AbstractCanalClient implements CanalClient {
 
     private CanalConnector connector;
 
+    /**
+     * 声明一个线程池
+     */
+    private ThreadPoolExecutor executor;
+
     AbstractCanalClient(CanalConfig config) {
         this.config = config;
+        executor = new ThreadPoolExecutor(3, 5, 60L,
+                TimeUnit.SECONDS, new LinkedBlockingQueue<>(1024), new ThreadFactoryBuilder()
+                .setNameFormat("canal-client-%d").build(), new ThreadPoolExecutor.AbortPolicy());
         initListeners();
     }
 
@@ -38,7 +50,7 @@ public abstract class AbstractCanalClient implements CanalClient {
         setRunning(Boolean.TRUE);
         Map<String, CanalConfig.Instance> instanceMap = getConfig();
         for (Map.Entry<String, CanalConfig.Instance> instanceEntry : instanceMap.entrySet()) {
-            process(processInstanceEntry(instanceEntry), instanceEntry);
+            executor.submit(() -> process(processInstanceEntry(instanceEntry), instanceEntry));
         }
     }
 
