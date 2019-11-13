@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.yibao.data</groupId>
     <artifactId>canal-client</artifactId>
-    <version>1.0</version>
+    <version>1.0.2</version>
     <name>canal-client</name>
     <description>canal客户端</description>
 

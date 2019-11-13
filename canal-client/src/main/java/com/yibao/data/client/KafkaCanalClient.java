@@ -47,7 +47,7 @@ public class KafkaCanalClient extends AbstractCanalClient {
         long interval = instance.getAcquireInterval();
         while (isRunning()) {
             try {
-                List<Message> messages = kafkaCanalConnector.getListWithoutAck(instance.getWaitTime(), TimeUnit.MILLISECONDS);
+                List<Message> messages = kafkaCanalConnector.getListWithoutAck(500L, TimeUnit.MILLISECONDS);
                 if (messages == null) {
                     continue;
                 }
@@ -93,7 +93,7 @@ public class KafkaCanalClient extends AbstractCanalClient {
     public CanalConnector processInstanceEntry(Map.Entry<String, CanalConfig.Instance> instanceEntry) {
         CanalConfig.Instance instance = instanceEntry.getValue();
         KafkaCanalConnector connector = new KafkaCanalConnector(instance.getServers(), instance.getTopic(),
-                instance.getPartition(), instance.getGroupId(), instance.getBatchSize(), Boolean.TRUE);
+                instance.getPartition(), instance.getGroupId(), instance.getBatchSize(), Boolean.FALSE);
         //canal 连接
         connector.connect();
         if (!StringUtils.isEmpty(instance.getFilter())) {

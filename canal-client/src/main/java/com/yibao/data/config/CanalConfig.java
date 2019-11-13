@@ -15,7 +15,6 @@ import java.util.Set;
  * @author liuwenyi
  * @date 2019/10/30
  */
-@Data
 @Primary
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ConfigurationProperties(prefix = "canal.client")
@@ -23,7 +22,17 @@ public class CanalConfig {
 
     private Map<String, Instance> instances = new LinkedHashMap<>();
 
-    @Data
+    public CanalConfig() {
+    }
+
+    public Map<String, Instance> getInstances() {
+        return instances;
+    }
+
+    public void setInstances(Map<String, Instance> instances) {
+        this.instances = instances;
+    }
+
     public static class Instance {
 
         /**
@@ -104,6 +113,137 @@ public class CanalConfig {
          * 分组
          */
         private String groupId;
+
+        public Instance() {
+        }
+
+        public boolean isClusterEnabled() {
+            return clusterEnabled;
+        }
+
+        public void setClusterEnabled(boolean clusterEnabled) {
+            this.clusterEnabled = clusterEnabled;
+        }
+
+        public Set<String> getZookeeperAddress() {
+            return zookeeperAddress;
+        }
+
+        public void setZookeeperAddress(Set<String> zookeeperAddress) {
+            this.zookeeperAddress = zookeeperAddress;
+        }
+
+        public String getHost() {
+            return host;
+        }
+
+        public void setHost(String host) {
+            this.host = host;
+        }
+
+        public int getPort() {
+            return port;
+        }
+
+        public void setPort(int port) {
+            this.port = port;
+        }
+
+        public String getUserName() {
+            return userName;
+        }
+
+        public void setUserName(String userName) {
+            this.userName = userName;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
+
+        public int getBatchSize() {
+            return batchSize;
+        }
+
+        public void setBatchSize(int batchSize) {
+            this.batchSize = batchSize;
+        }
+
+        public String getFilter() {
+            return filter;
+        }
+
+        public void setFilter(String filter) {
+            this.filter = filter;
+        }
+
+        public int getRetryCount() {
+            return retryCount;
+        }
+
+        public void setRetryCount(int retryCount) {
+            this.retryCount = retryCount;
+        }
+
+        public long getAcquireInterval() {
+            return acquireInterval;
+        }
+
+        public void setAcquireInterval(long acquireInterval) {
+            this.acquireInterval = acquireInterval;
+        }
+
+        public long getWaitTime() {
+            return waitTime;
+        }
+
+        public void setWaitTime(long waitTime) {
+            this.waitTime = waitTime;
+        }
+
+        public boolean isKafkaEnable() {
+            return kafkaEnable;
+        }
+
+        public void setKafkaEnable(boolean kafkaEnable) {
+            this.kafkaEnable = kafkaEnable;
+        }
+
+        public String getServers() {
+            return servers;
+        }
+
+        public void setServers(String servers) {
+            this.servers = servers;
+        }
+
+        public String getTopic() {
+            return topic;
+        }
+
+        public void setTopic(String topic) {
+            this.topic = topic;
+        }
+
+        public Integer getPartition() {
+            return partition;
+        }
+
+        public void setPartition(Integer partition) {
+            this.partition = partition;
+        }
+
+        public String getGroupId() {
+            return groupId;
+        }
+
+        public void setGroupId(String groupId) {
+            this.groupId = groupId;
+        }
     }
 }
 
