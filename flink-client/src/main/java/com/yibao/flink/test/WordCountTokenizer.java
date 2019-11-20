@@ -10,16 +10,14 @@ import org.apache.flink.util.Collector;
  */
 public class WordCountTokenizer implements FlatMapFunction<String, Tuple2<String, Integer>> {
 
-    public WordCountTokenizer() {
+     WordCountTokenizer() {
     }
 
     @Override
     public void flatMap(String s, Collector<Tuple2<String, Integer>> collector) throws Exception {
         String[] tokens = s.toLowerCase().split("\\W+");
-        int len = tokens.length;
 
-        for (int i = 0; i < len; i++) {
-            String tmp = tokens[i];
+        for (String tmp : tokens) {
             if (tmp.length() > 0) {
                 collector.collect(new Tuple2<>(tmp, 1));
             }

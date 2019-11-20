@@ -51,7 +51,7 @@ public class MessageHandler implements Handler<Message> {
                     .schemaName(entry.getHeader().getSchemaName())
                     .tableName(entry.getHeader().getTableName())
                     .eventType(rowChange.getEventType())
-                    .isDdl(rowChange.getIsDdl())
+                    .isDdl_(rowChange.getIsDdl())
                     .beforeColumnList(getChangeList(rowChange, Boolean.FALSE))
                     .afterColumnList(getChangeList(rowChange, Boolean.TRUE))
                     .build();
@@ -134,8 +134,8 @@ public class MessageHandler implements Handler<Message> {
     private static List<CanalMessage.ColumnChange> getColumnList(List<CanalEntry.Column> columnList) {
         return columnList.stream().map(item -> CanalMessage.ColumnChange.builder()
                 .name(item.getName())
-                .isKey(item.getIsKey())
-                .isNull(item.getIsNull())
+                .isKey_(item.getIsKey())
+                .isNull_(item.getIsNull())
                 .updated(item.getUpdated())
                 .value(item.getValue())
                 .build())

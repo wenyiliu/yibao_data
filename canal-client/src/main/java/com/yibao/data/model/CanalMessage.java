@@ -31,7 +31,7 @@ public class CanalMessage {
     /**
      * ddl
      */
-    private boolean isDdl;
+    private boolean isDdl_;
 
     /**
      * 原始列
@@ -55,7 +55,7 @@ public class CanalMessage {
         /**
          * 是否是主键
          */
-        private boolean isKey;
+        private boolean isKey_;
 
         /**
          * 字段值是否更新
@@ -65,7 +65,7 @@ public class CanalMessage {
         /**
          * 是否为空
          */
-        private boolean isNull;
+        private boolean isNull_;
 
         /**
          * 字段值
