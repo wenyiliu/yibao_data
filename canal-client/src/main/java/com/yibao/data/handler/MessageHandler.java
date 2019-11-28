@@ -44,18 +44,21 @@ public class MessageHandler implements Handler<Message> {
             CanalEntry.RowChange rowChange;
             try {
                 rowChange = CanalEntry.RowChange.parseFrom(entry.getStoreValue());
+                rowChange.getRowDatasList().forEach(rowData -> {
+                    CanalMessage build = CanalMessage.builder()
+                            .schemaName(entry.getHeader().getSchemaName())
+                            .tableName(entry.getHeader().getTableName())
+                            .eventType(rowChange.getEventType())
+                            .isDdl_(rowChange.getIsDdl())
+                            .beforeColumnList(getChangeList(rowData, Boolean.FALSE))
+                            .afterColumnList(getChangeList(rowData, Boolean.TRUE))
+                            .build();
+                    doAnnotation(build);
+                });
             } catch (Exception e) {
                 throw new CanalClientException("转换错误,数据信息:", entry.toString());
             }
-            CanalMessage build = CanalMessage.builder()
-                    .schemaName(entry.getHeader().getSchemaName())
-                    .tableName(entry.getHeader().getTableName())
-                    .eventType(rowChange.getEventType())
-                    .isDdl_(rowChange.getIsDdl())
-                    .beforeColumnList(getChangeList(rowChange, Boolean.FALSE))
-                    .afterColumnList(getChangeList(rowChange, Boolean.TRUE))
-                    .build();
-            doAnnotation(build);
+
         }
         return true;
     }
@@ -115,19 +118,17 @@ public class MessageHandler implements Handler<Message> {
     /**
      * 获取改变的列
      *
-     * @param rowChange 列值的变化
-     * @param isChange  true 改变后的列 false 改变前的列
+     * @param rowData  列值的变化
+     * @param isChange true 改变后的列 false 改变前的列
      * @return List<CanalMessage.ColumnChange>
      */
-    private static List<CanalMessage.ColumnChange> getChangeList(CanalEntry.RowChange rowChange, boolean isChange) {
+    private static List<CanalMessage.ColumnChange> getChangeList(CanalEntry.RowData rowData, boolean isChange) {
         List<CanalMessage.ColumnChange> columnChangeList = Lists.newArrayList();
-        rowChange.getRowDatasList().forEach(rowData -> {
-            if (isChange) {
-                columnChangeList.addAll(getColumnList(rowData.getAfterColumnsList()));
-            } else {
-                columnChangeList.addAll(getColumnList(rowData.getBeforeColumnsList()));
-            }
-        });
+        if (isChange) {
+            columnChangeList.addAll(getColumnList(rowData.getAfterColumnsList()));
+        } else {
+            columnChangeList.addAll(getColumnList(rowData.getBeforeColumnsList()));
+        }
         return columnChangeList;
     }
 

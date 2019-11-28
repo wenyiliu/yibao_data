@@ -47,7 +47,7 @@ public class KafkaCanalClient extends AbstractCanalClient {
         long interval = instance.getAcquireInterval();
         while (isRunning()) {
             try {
-                List<Message> messages = kafkaCanalConnector.getListWithoutAck(500L, TimeUnit.MILLISECONDS);
+                List<Message> messages = kafkaCanalConnector.getListWithoutAck(200L, TimeUnit.MILLISECONDS);
                 if (messages == null) {
                     continue;
                 }
