@@ -1,17 +1,16 @@
-package com.yibao.data;
+package com.yibao.ml;
 
-import com.yibao.data.annotation.EnableCanalClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * @author liuwenyi
+ * @date 2019/12/26
  */
-@EnableCanalClient
 @SpringBootApplication
-public class CanalClientApplication {
+public class MlApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(CanalClientApplication.class, args);
+        SpringApplication.run(MlApplication.class, args);
     }
 }
