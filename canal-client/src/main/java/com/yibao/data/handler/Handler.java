@@ -10,7 +10,6 @@ public interface Handler<T> {
      * 处理binlog数据
      *
      * @param t T
-     * @return Boolean
      */
-    Boolean doChain(T t);
+    void doChain(T t);
 }

@@ -1,16 +1,17 @@
-package com.yibao.flink;
+package com.yibao.hanlp;
+
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * @author liuwenyi
+ * @date 2020/04/21
  */
 @SpringBootApplication
-public class FlinkClientApplication {
+public class HanLpClientWebApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(FlinkClientApplication.class, args);
+        SpringApplication.run(HanLpClientWebApplication.class, args);
     }
-
 }

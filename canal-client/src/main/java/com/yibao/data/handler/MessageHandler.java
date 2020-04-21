@@ -28,13 +28,12 @@ public class MessageHandler implements Handler<Message> {
 
     private List<ListenerPoint> annotationList;
 
-
     public MessageHandler(List<ListenerPoint> annotationList) {
         this.annotationList = annotationList;
     }
 
     @Override
-    public Boolean doChain(Message message) {
+    public void doChain(Message message) {
         List<CanalEntry.Entry> entryList = message.getEntries();
         List<CanalEntry.EntryType> ignoreEntryTypes = getIgnoreEntryTypes();
         for (CanalEntry.Entry entry : entryList) {
@@ -60,29 +59,30 @@ public class MessageHandler implements Handler<Message> {
             }
 
         }
-        return true;
     }
 
     private void doAnnotation(CanalMessage message) {
-        if (!CollectionUtils.isEmpty(annotationList)) {
-            annotationList.forEach(point -> point.getInvokeMap()
-                    .entrySet()
-                    .stream()
-                    .filter(getAnnotationFilter(message))
-                    .forEach(entry -> {
-                        Method method = entry.getKey();
-                        method.setAccessible(Boolean.TRUE);
-                        try {
-                            Object[] args = getInvokeArgs(method, message);
-                            method.invoke(point.getTarget(), args);
-                        } catch (Exception e) {
-                            log.error("{}: 委托 canal 监听器发生错误! 错误类:{}, 方法名:{}",
-                                    Thread.currentThread().getName(),
-                                    point.getTarget().getClass().getName(), method.getName());
-                        }
-                    })
-            );
+        if (CollectionUtils.isEmpty(annotationList)) {
+            return;
         }
+        annotationList.forEach(point -> point.getInvokeMap()
+                .entrySet()
+                .stream()
+                .filter(getAnnotationFilter(message))
+                .forEach(entry -> {
+                    Method method = entry.getKey();
+                    method.setAccessible(Boolean.TRUE);
+                    try {
+                        Object[] args = getInvokeArgs(method, message);
+                        method.invoke(point.getTarget(), args);
+                    } catch (Exception e) {
+                        log.error("{}: 委托 canal 监听器发生错误! 错误类:{}, 方法名:{}",
+                                Thread.currentThread().getName(),
+                                point.getTarget().getClass().getName(), method.getName());
+                    }
+                })
+        );
+
     }
 
     private List<CanalEntry.EntryType> getIgnoreEntryTypes() {

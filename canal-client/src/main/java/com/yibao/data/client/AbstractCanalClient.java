@@ -9,6 +9,7 @@ import com.yibao.data.annotation.ListenPoint;
 import com.yibao.data.config.CanalConfig;
 import com.yibao.data.listener.ListenerPoint;
 import com.yibao.data.util.BeanUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 
 import java.lang.reflect.Method;
@@ -29,8 +30,6 @@ public abstract class AbstractCanalClient implements CanalClient {
     private List<ListenerPoint> annotationList = Lists.newArrayList();
 
     private CanalConfig config;
-
-    private CanalConnector connector;
 
     /**
      * 声明一个线程池
@@ -90,41 +89,33 @@ public abstract class AbstractCanalClient implements CanalClient {
     private void initListeners() {
         Map<String, Object> listenerMap = BeanUtil.getBeansWithAnnotation(CanalEventListener.class);
         //也放入 map
-        if (listenerMap != null) {
-            for (Object target : listenerMap.values()) {
-                //方法获取
-                Method[] methods = target.getClass().getDeclaredMethods();
-                if (methods == null || methods.length <= 0) {
-                    continue;
+        if (listenerMap.isEmpty()) {
+            return;
+        }
+        for (Object target : listenerMap.values()) {
+            //方法获取
+            Method[] methods = target.getClass().getDeclaredMethods();
+            if (methods == null || methods.length <= 0) {
+                continue;
+            }
+            for (Method method : methods) {
+                ListenPoint l = AnnotatedElementUtils.findMergedAnnotation(method, ListenPoint.class);
+                if (l != null) {
+                    annotationList.add(new ListenerPoint(target, method, l));
                 }
-                for (Method method : methods) {
-                    ListenPoint l = AnnotatedElementUtils.findMergedAnnotation(method, ListenPoint.class);
-                    if (l != null) {
-                        annotationList.add(new ListenerPoint(target, method, l));
-                    }
-                }
-
             }
         }
     }
 
-    public List<ListenerPoint> getAnnotationList() {
+    List<ListenerPoint> getAnnotationList() {
         return annotationList;
     }
 
-    public CanalConnector getConnector() {
-        return connector;
-    }
-
-    public void setConnector(CanalConnector connector) {
-        this.connector = connector;
-    }
-
-    public boolean isRunning() {
+    boolean isRunning() {
         return running;
     }
 
-    public void setRunning(boolean running) {
+    private void setRunning(boolean running) {
         this.running = running;
     }
 }
